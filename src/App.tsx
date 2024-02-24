@@ -1,5 +1,10 @@
 import { useEffect, useReducer } from "react";
 import { Header } from "./components/Header";
+// import "./index.css";
+import { Main } from "./components/Main";
+import { Loader } from "./components/Loader";
+import { Error as AppError } from "./components/Error";
+import { Box } from "@chakra-ui/react";
 
 type Status =
 	| "loading"
@@ -20,8 +25,6 @@ const initialState = {
 };
 
 const reducer = (state: any, action: Action) => {
-	console.log(state);
-
 	switch (action.type) {
 		case "received":
 			return {
@@ -47,7 +50,8 @@ const reducer = (state: any, action: Action) => {
 };
 
 function App() {
-	const [state, dispatch] = useReducer(reducer, initialState);
+	const [{ question, status }, dispatch] = useReducer(reducer, initialState);
+	console.log(question, "Question");
 
 	useEffect(function () {
 		async function getMeData() {
@@ -56,6 +60,7 @@ function App() {
 				const data = await response.json();
 				dispatch({ type: "received", payload: data });
 			} catch (error) {
+				dispatch({ type: "error" });
 				console.log(error, "Error");
 			}
 		}
@@ -63,9 +68,12 @@ function App() {
 	}, []);
 
 	return (
-		<>
+		<Box backgroundColor="#495057" height="100vh">
 			<Header />
-		</>
+			<Main>{status === "loading" && <Loader />}</Main>
+			<Main>{status === "error" && <AppError />}</Main>
+			<Main>{status === "ready" && <AppError />}</Main>
+		</Box>
 	);
 }
 
