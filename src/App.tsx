@@ -1,10 +1,12 @@
 import { useEffect, useReducer } from "react";
 import { Header } from "./components/Header";
-// import "./index.css";
 import { Main } from "./components/Main";
 import { Loader } from "./components/Loader";
 import { Error as AppError } from "./components/Error";
 import { Box } from "@chakra-ui/react";
+import "./index.css";
+import { StartScreen } from "./components/StartScreen";
+import { Question } from "./components/Question";
 
 type Status =
 	| "loading"
@@ -16,8 +18,8 @@ type Status =
 	| "failed";
 
 type Action = {
-	type: Status;
-	payload?: any;
+	type: string;
+	payload?: Status;
 };
 const initialState = {
 	questions: [],
@@ -31,6 +33,11 @@ const reducer = (state: any, action: Action) => {
 				...state,
 				status: action.type,
 				questions: action.payload,
+			};
+		case "start":
+			return {
+				...state,
+				status: "active",
 			};
 		case "failed":
 			return {
@@ -50,8 +57,8 @@ const reducer = (state: any, action: Action) => {
 };
 
 function App() {
-	const [{ question, status }, dispatch] = useReducer(reducer, initialState);
-	console.log(question, "Question");
+	const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
+	const numOfQuestions: number = questions.length;
 
 	useEffect(function () {
 		async function getMeData() {
@@ -68,11 +75,16 @@ function App() {
 	}, []);
 
 	return (
-		<Box backgroundColor="#495057" height="100vh">
+		<Box backgroundColor='#343a40' height='100vh'>
 			<Header />
-			<Main>{status === "loading" && <Loader />}</Main>
-			<Main>{status === "error" && <AppError />}</Main>
-			<Main>{status === "ready" && <AppError />}</Main>
+			<Main>
+				{status === "loading" && <Loader />}
+				{status === "error" && <AppError />}
+				{status === "received" && (
+					<StartScreen numOfQuestions={numOfQuestions} dispatch={dispatch} />
+				)}
+				{status === "active" && <Question />}
+			</Main>
 		</Box>
 	);
 }

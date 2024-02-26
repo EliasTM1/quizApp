@@ -1,10 +1,11 @@
-import { Img } from "@chakra-ui/react";
+import { HStack, Heading, Img } from "@chakra-ui/react";
+import imga from "../assets/react.png";
 
 export const Header = () => {
 	return (
-		<header className='app-header'>
-			<Img src='../assets/pin.jpeg' alt='React' />
-			<h1>The React Quiz</h1>
-		</header>
+		<HStack className='app-header' justifyContent='center' color='#ced4da'>
+			<Img width="100px" src={imga} alt='React' />
+			<Heading marginLeft="1rem">The React Quiz</Heading>
+		</HStack>
 	);
 };
