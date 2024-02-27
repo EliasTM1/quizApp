@@ -9,7 +9,6 @@ type StartScreenProps = {
 export const StartScreen = ({ numOfQuestions, dispatch }: StartScreenProps) => {
 
     function handleClick() {
-        console.log("click")
         dispatch({type: 'start'})
     }
 	return (
