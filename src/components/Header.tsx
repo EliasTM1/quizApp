@@ -5,7 +5,7 @@ export const Header = () => {
 	return (
 		<HStack className='app-header' justifyContent='center' color='#ced4da'>
 			<Img width="100px" src={imga} alt='React' />
-			<Heading marginLeft="1rem">The React Quiz</Heading>
+			<Heading marginLeft="1rem">CHECK YOUR REACT DAILY</Heading>
 		</HStack>
 	);
 };

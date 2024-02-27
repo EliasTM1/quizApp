@@ -7,7 +7,7 @@ type FinishScreenProps = {
 	percentage: number;
 	highscore: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	dispatch: Dispatch<{type: string, payload?: any}>
+	dispatch: Dispatch<any>
 };
 
 export default function FinishScreen({

@@ -10,19 +10,23 @@ import { Question } from "./components/Question";
 import { NextButton } from "./components/NextButton";
 import Progress from "./components/Progress";
 import FinishScreen from "./components/FinishScreen";
+import Timer from "./components/Timer";
 
 type Status =
-	| "loading"
-	| "error"
-	| "ready"
-	| "active"
-	| "finished"
 	| "received"
-	| "failed";
+	| "start"
+	| "failed"
+	| "nextQuestion"
+	| "finished"
+	| "restart"
+	| "error"
+	| "tick"
+	| "newAnswer";
 
 type Action = {
-	type: string;
-	payload?: Status;
+	type: Status;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	payload?: any;
 };
 type InitialState = {
 	questions: [];
@@ -31,8 +35,9 @@ type InitialState = {
 	answer: number | null;
 	points: number;
 	highscore: number;
+	secondsRemaining: number | null;
 };
-
+const SECS_PER_QUESTION = 30;
 const initialState: InitialState = {
 	questions: [],
 	status: "loading",
@@ -40,6 +45,7 @@ const initialState: InitialState = {
 	answer: null,
 	points: 0,
 	highscore: 0,
+	secondsRemaining: null
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -55,17 +61,16 @@ const reducer = (state: any, action: Action) => {
 			return {
 				...state,
 				status: "active",
+				secondsRemaining: state.questions.length * SECS_PER_QUESTION
 			};
 		case "failed":
 			return {
 				...state,
-				// status: action.type,
 				status: "Error",
 			};
 		case "nextQuestion":
 			return {
 				...state,
-				// status: action.type,
 				index: state.index + 1,
 				answer: null,
 			};
@@ -78,10 +83,17 @@ const reducer = (state: any, action: Action) => {
 			};
 		case "restart":
 			return {
-				...state,
-				status: action.type,
-				highscore:
-					state.points > state.highscore ? state.points : state.highscore,
+				...initialState,
+				questions: state.questions,
+				status: "active",
+			};
+		case "tick":
+			return {
+				...initialState,
+				questions: state.questions,
+				status: state.secondsRemaining === 0 ?  "finished" : state.status,
+				secondsRemaining : state.secondsRemaining - 1
+				
 			};
 		case "newAnswer":
 			// eslint-disable-next-line no-case-declarations
@@ -100,7 +112,7 @@ const reducer = (state: any, action: Action) => {
 };
 
 function App() {
-	const [{ questions, status, answer, index, points, highscore }, dispatch] = useReducer(
+	const [{ questions, status, answer, index, points, highscore, secondsRemaining }, dispatch] = useReducer(
 		reducer,
 		initialState
 	);
@@ -154,6 +166,7 @@ function App() {
 								index={index}
 								numOfQuestions={numOfQuestions}
 							/>
+							<Timer dispatch={dispatch} secondsRemaining={secondsRemaining}/>
 						</Question>
 					</Stack>
 				)}

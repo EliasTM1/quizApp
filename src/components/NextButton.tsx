@@ -3,7 +3,7 @@ import { Dispatch } from "react";
 
 type NextButtonProps = {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	dispatch: Dispatch<{ type: string; payload?: any }>;
+	dispatch: Dispatch<any>;
 	answer: number;
 	index: number;
 	numOfQuestions: number;
