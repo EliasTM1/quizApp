@@ -33,7 +33,7 @@ export const Question = ({children}: any) => {
 							width='100%'
 							key={index}
 							onClick={() =>
-								newAnswer( correctOption )
+								newAnswer( index )
 							}
 							style={
 								index === correctOption && answer !== null

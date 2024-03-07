@@ -46,7 +46,7 @@ export default function FinishScreen() {
 					color: "#343a40",
 				}}
 				width='100%'
-				onClick={restart}
+				onClick={() => restart()}
 			>
 				Restart quiz
 			</Button>

@@ -41,6 +41,7 @@ const initialState: InitialState = {
 // * When using a reducer
 // * 1 Create reducer
 const reducer = (state: InitialState, action: Action) => {
+	const question = state.questions[state.index];
 	switch (action.type) {
 		case "received":
 			return {
@@ -69,14 +70,15 @@ const reducer = (state: InitialState, action: Action) => {
 			return {
 				...state,
 				status: action.type,
-				highscore:
-					state.points > state.highscore ? state.points : state.highscore,
+				highscore: state.points > state.highscore ? state.points : state.highscore,
+				secondsRemaining: 0
 			};
 		case "restart":
 			return {
 				...initialState,
 				questions: state.questions,
 				status: "active",
+				secondsRemaining: state.questions.length * SECS_PER_QUESTION,
 			};
 		case "tick":
 			return {
@@ -87,14 +89,13 @@ const reducer = (state: InitialState, action: Action) => {
 			};
 		case "newAnswer":
 			// eslint-disable-next-line no-case-declarations
-			const question = state.questions[state.index];
+			console.log(action.payload, "ANSWER")
+			console.log( question, "DOS")
+			
 			return {
 				...state,
 				answer: action.payload,
-				points:
-					action.payload === question.correctOption
-						? Number(state.points) + Number(question.points)
-						: state.points,
+				points: action.payload === question.correctOption ? Number(state.points) + Number(question.points) : Number(state.points),
 			};
 		default:
 			throw new Error("Action unknown");
