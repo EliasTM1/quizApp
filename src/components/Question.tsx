@@ -1,34 +1,16 @@
-import { Box, BoxProps, Button, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Text, VStack } from "@chakra-ui/react";
+import { useQuizz } from "../context/QuestionsContext";
 
-type QuestionProps = BoxProps & {
-	question: {
-		correctOption: number;
-		id: string;
-		options: [];
-		points: number;
-		question: string;
-	};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	dispatch: (ar: any) => void;
-	answer?: string;
-};
-
-export const Question = ({
-	question,
-	dispatch,
-	answer,
-	children,
-}: QuestionProps) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const Question = ({children}: any) => {
+	const {questions, index, answer, newAnswer} = useQuizz()
+	const question = questions[index]
 	const {
 		correctOption,
-		id,
 		options,
-		points,
 		question: currentQuestion,
 	} = question;
 	const hasAnswered = answer !== null;
-	console.log(id)
-	console.log(points)
 	return (
 		<Box margin='auto' width='50%' color='white'>
 			<Text fontSize='2rem'>{currentQuestion}</Text>
@@ -39,9 +21,6 @@ export const Question = ({
 			</Select> */}
 			<VStack gap='1rem'>
 				{options.map((option, index) => {
-					console.clear();
-					console.log(index, "index");
-					console.log(answer, "answer");
 					return (
 						<Button
 							backgroundColor={
@@ -51,11 +30,10 @@ export const Question = ({
 										: "orange"
 									: ""
 							}
-							// color={hasAnswered ? "white" : "black"}
 							width='100%'
 							key={index}
 							onClick={() =>
-								dispatch({ type: "newAnswer", payload: correctOption })
+								newAnswer( correctOption )
 							}
 							style={
 								index === correctOption && answer !== null

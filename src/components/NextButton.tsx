@@ -1,25 +1,14 @@
 import { Button } from "@chakra-ui/react";
-import { Dispatch } from "react";
+import { useQuizz } from "../context/QuestionsContext";
 
-type NextButtonProps = {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	dispatch: Dispatch<any>;
-	answer: number;
-	index: number;
-	numOfQuestions: number;
-};
+export const NextButton = () => {
+	const { numOfQuestions, answer, index, nextQuestion, finished } = useQuizz();
 
-export const NextButton = ({
-	dispatch,
-	answer,
-	index,
-	numOfQuestions,
-}: NextButtonProps) => {
 	const lastQuestion = index === numOfQuestions - 1;
 	if (answer === null) return null;
 	function handleNext() {
-		if (lastQuestion) return dispatch({ type: "finished" });
-		dispatch({ type: "nextQuestion" });
+		if (lastQuestion) return finished();
+		nextQuestion();
 	}
 	return (
 		<Button

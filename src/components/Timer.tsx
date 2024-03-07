@@ -1,20 +1,17 @@
-import { Dispatch, useEffect } from "react";
+import { useEffect } from "react";
+import { useQuizz } from "../context/QuestionsContext";
 
-type TimerProps = {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	dispatch: Dispatch<any>;
-	secondsRemaining: number;
-};
-export default function Timer({ dispatch, secondsRemaining }: TimerProps) {
-    const mins = Math.floor(secondsRemaining / 60)
-    const secs = secondsRemaining % 60
+export default function Timer() {
+	const {secondsRemaining, tick } = useQuizz()
+    const mins = Math.floor(secondsRemaining! / 60)
+    const secs = secondsRemaining! % 60
 
 	useEffect(() => {
 		const id = setInterval(() => {
-			dispatch({ type: "tick" });
+			tick();
 		}, 1000);
 
 		return () => clearInterval(id);
-	}, [dispatch]);
+	}, [tick]);
 	return <div>{mins}: {secs > 10 ? secs: `0${secs}`}</div>;
 }

@@ -1,16 +1,9 @@
 import { Button, Heading, VStack } from "@chakra-ui/react";
+import { useQuizz } from "../context/QuestionsContext";
 
-type StartScreenProps = {
-	numOfQuestions: number;
-	// dispatch: Dispatch<any>;
-	dispatch: any;
-};
+export const StartScreen = () => {
 
-export const StartScreen = ({ numOfQuestions, dispatch }: StartScreenProps) => {
-
-    function handleClick() {
-        dispatch({type: 'start'})
-    }
+    const {numOfQuestions, startQuizz} = useQuizz()
 	return (
 		<VStack paddingBlock='1rem' color='#ced4da'>
 			<Heading as='h2'>Welcome to the React Quiz!</Heading>
@@ -29,7 +22,7 @@ export const StartScreen = ({ numOfQuestions, dispatch }: StartScreenProps) => {
 					backgroundColor: "#ced4da",
 					color: "#343a40",
 				}}
-                onClick={handleClick}
+                onClick={startQuizz}
 			>
 				Let's start
 			</Button>

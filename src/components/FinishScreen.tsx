@@ -1,27 +1,15 @@
 import { Button, Heading, Stack, Text } from "@chakra-ui/react";
-import { Dispatch } from "react";
+import { useQuizz } from "../context/QuestionsContext";
 
-type FinishScreenProps = {
-	points: number;
-	maxPossiblePoints: number;
-	percentage: number;
-	highscore: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	dispatch: Dispatch<any>
-};
 
-export default function FinishScreen({
-	maxPossiblePoints,
-	points,
-	percentage,
-	highscore,
-	dispatch
-}: FinishScreenProps) {
+export default function FinishScreen() {
+	const { points, currentProgress, maxPointsPossible, highscore, restart} = useQuizz()
+
 	let emoji;
-	if (points === maxPossiblePoints) emoji = "🥇";
-	if (points >= 80 && percentage < maxPossiblePoints) emoji = "🥈";
-	if (points >= 50 && percentage < maxPossiblePoints) emoji = "🥉";
-	if (points >= 0 && percentage < maxPossiblePoints)
+	if (points === maxPointsPossible) emoji = "🥇";
+	if (points >= 80 && currentProgress < maxPointsPossible) emoji = "🥈";
+	if (points >= 50 && currentProgress < maxPointsPossible) emoji = "🥉";
+	if (points >= 0 && currentProgress < maxPointsPossible)
 		emoji = "No medal for you.";
 	if (points === 0) emoji = "You are not ready. 🤦‍♂️";
 	return (
@@ -40,7 +28,7 @@ export default function FinishScreen({
 				fontSize='1.5rem'
 				color='black'
 			>
-				You scored <strong>{points}</strong> out of {maxPossiblePoints} possible{" "}
+				You scored <strong>{points}</strong> out of {maxPointsPossible} possible{" "}
 				<br />
 				<Text fontSize='5rem'>{emoji}</Text>
 			</Text>
@@ -58,7 +46,7 @@ export default function FinishScreen({
 					color: "#343a40",
 				}}
 				width='100%'
-				onClick={() => dispatch({type: "restart"})}
+				onClick={restart}
 			>
 				Restart quiz
 			</Button>

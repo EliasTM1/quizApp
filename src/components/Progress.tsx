@@ -1,20 +1,15 @@
 import { Box, Progress as ChakraProgress, HStack } from "@chakra-ui/react";
-type ProgressProps = {
-	numOfQuestions: number;
-	index: number;
-	points?: number;
-    maxPossiblePoints: number
-    answer: number
-	currentProgress: number
-};
-export default function Progress({
-	numOfQuestions,
-	index,
-	points,
-    maxPossiblePoints,
-	currentProgress,
-    answer
-}: ProgressProps) {
+import { useQuizz } from "../context/QuestionsContext";
+// type ProgressProps = {
+// 	numOfQuestions: number;
+// 	index: number;
+// 	points?: number;
+//     maxPossiblePoints: number
+//     answer: number
+// 	currentProgress: number
+// };
+export default function Progress() {
+	const {numOfQuestions,points, currentProgress, index, maxPointsPossible } = useQuizz()
 	return (
 		<>
 			<ChakraProgress
@@ -27,7 +22,7 @@ export default function Progress({
 					Complete questions <strong>{index}</strong> / {numOfQuestions}
 				</Box>
 				<Box>
-					<strong>Points</strong>: {points} / {maxPossiblePoints}
+					<strong>Points</strong>: {points} / {maxPointsPossible}
 				</Box>
 			</HStack>
 		</>
